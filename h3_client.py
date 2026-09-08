@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import time
 import urllib.error
 import urllib.parse
@@ -13,6 +14,11 @@ from typing import Any
 
 class H3ApiError(RuntimeError):
     pass
+
+
+CLIENT_VERSION = "0.1.1"
+SUPPORTED_API_VERSION = "v1"
+SUPPORTED_SERVER_SERIES = (0, 1)
 
 
 FilePart = tuple[str, str, str, bytes]
@@ -32,6 +38,25 @@ class H3Client:
 
     def health(self) -> dict[str, Any]:
         return self._json_request("/healthz")
+
+    def capabilities(self) -> dict[str, Any]:
+        return self._json_request("/v1/capabilities")
+
+    def require_compatible_server(self) -> dict[str, Any]:
+        capabilities = self.capabilities()
+        api_version = capabilities.get("api_version")
+        if api_version != SUPPORTED_API_VERSION:
+            raise H3ApiError(
+                f"unsupported H3 API version {api_version!r}; expected {SUPPORTED_API_VERSION}"
+            )
+        server_version = capabilities.get("server_version")
+        match = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", str(server_version))
+        if not match or tuple(map(int, match.groups()[:2])) != SUPPORTED_SERVER_SERIES:
+            expected = ".".join(map(str, SUPPORTED_SERVER_SERIES)) + ".x"
+            raise H3ApiError(
+                f"unsupported H3 server version {server_version!r}; expected {expected}"
+            )
+        return capabilities
 
     def submit(self, request: dict[str, Any], files: Iterable[FilePart] = ()) -> dict[str, Any]:
         file_parts = list(files)

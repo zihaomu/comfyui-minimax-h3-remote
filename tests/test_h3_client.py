@@ -35,6 +35,45 @@ class H3ClientTests(unittest.TestCase):
             H3Client("https://h3.example.com", "")
 
     @patch("h3_client.urllib.request.urlopen")
+    def test_capabilities_use_versioned_endpoint(self, urlopen) -> None:
+        urlopen.return_value = FakeResponse(
+            b'{"api_version":"v1","server_version":"0.1.0"}'
+        )
+        client = H3Client("https://h3.example.com", "test-token")
+
+        capabilities = client.capabilities()
+
+        self.assertEqual(capabilities["api_version"], "v1")
+        request = urlopen.call_args.args[0]
+        self.assertEqual(request.full_url, "https://h3.example.com/v1/capabilities")
+        self.assertEqual(request.get_header("Authorization"), "Bearer test-token")
+
+    @patch("h3_client.urllib.request.urlopen")
+    def test_compatibility_accepts_v1_server_0_1_series(self, urlopen) -> None:
+        urlopen.return_value = FakeResponse(
+            b'{"api_version":"v1","server_version":"0.1.9"}'
+        )
+        capabilities = H3Client(
+            "https://h3.example.com", "test-token"
+        ).require_compatible_server()
+        self.assertEqual(capabilities["server_version"], "0.1.9")
+
+    @patch("h3_client.urllib.request.urlopen")
+    def test_compatibility_rejects_unsupported_api_or_server(self, urlopen) -> None:
+        client = H3Client("https://h3.example.com", "test-token")
+        urlopen.return_value = FakeResponse(
+            b'{"api_version":"v2","server_version":"0.1.0"}'
+        )
+        with self.assertRaisesRegex(H3ApiError, "API version"):
+            client.require_compatible_server()
+
+        urlopen.return_value = FakeResponse(
+            b'{"api_version":"v1","server_version":"0.2.0"}'
+        )
+        with self.assertRaisesRegex(H3ApiError, "server version"):
+            client.require_compatible_server()
+
+    @patch("h3_client.urllib.request.urlopen")
     def test_json_submit_uses_bearer_auth_and_expected_payload(self, urlopen) -> None:
         urlopen.return_value = FakeResponse(b'{"job_id":"job-1","status":"queued"}')
         client = H3Client("https://h3.example.com", "test-token")

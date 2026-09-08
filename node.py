@@ -80,6 +80,7 @@ class MiniMaxH3Remote:
         frames = _snap_frames(frames)
         _validate_inputs(mode, first_frame, last_frame, ref_images, ref_video, ref_audio)
         client = H3Client(server_url, api_key)
+        client.require_compatible_server()
         request = {
             "mode": mode,
             "prompt": prompt,

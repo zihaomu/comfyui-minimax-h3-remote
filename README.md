@@ -15,7 +15,7 @@
 ## Requirements
 
 - A current ComfyUI release with native `VIDEO` support.
-- A compatible MiniMax H3 server exposing the `/v1` asynchronous job API.
+- A MiniMax H3 server exposing API `v1`; client 0.1.x supports server 0.1.x.
 - Network access from the local ComfyUI Python process to that server.
 
 The node uses dependencies already shipped with current ComfyUI: PyTorch, Pillow, NumPy, PyAV, and the Python standard library.
@@ -77,7 +77,7 @@ python -m unittest discover -s tests -v
 python scripts/generate_workflows.py --check
 ```
 
-See [Troubleshooting](doc/troubleshooting.md) and the [client/server evolution plan](doc/项目目的与服务端客户端演进规划.md).
+See [Troubleshooting](doc/troubleshooting.md), the [compatibility matrix](doc/compatibility.md), and the [client/server evolution plan](doc/项目目的与服务端客户端演进规划.md).
 
 ## License
 

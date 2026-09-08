@@ -3,6 +3,7 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 import re
+import subprocess
 import unittest
 
 
@@ -23,8 +24,31 @@ class RepositoryMetadataTests(unittest.TestCase):
         declared = re.search(r'^version = "([^"]+)"$', pyproject, re.MULTILINE)
         self.assertIsNotNone(declared)
         self.assertEqual(version, declared.group(1))
+        client_tree = ast.parse((ROOT / "h3_client.py").read_text(encoding="utf-8"))
+        client_version = next(
+            node.value.value
+            for node in client_tree.body
+            if isinstance(node, ast.Assign)
+            and any(
+                isinstance(target, ast.Name) and target.id == "CLIENT_VERSION"
+                for target in node.targets
+            )
+            and isinstance(node.value, ast.Constant)
+        )
+        self.assertEqual(client_version, version)
         self.assertIn('PublisherId = "zihaomu"', pyproject)
         self.assertIn('license = { file = "LICENSE" }', pyproject)
+
+    def test_joint_smoke_is_directly_executable(self) -> None:
+        result = subprocess.run(
+            ["python3", str(ROOT / "scripts" / "joint_smoke.py"), "--help"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--generate", result.stdout)
 
     def test_public_files_do_not_contain_credentials(self) -> None:
         pattern = re.compile(r"Bearer\s+[A-Za-z0-9_-]{16,}|H3_API_KEY=[A-Za-z0-9_-]{16,}")

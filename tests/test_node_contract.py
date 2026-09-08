@@ -110,6 +110,9 @@ class NodeContractTests(unittest.TestCase):
                 self.files = None
                 self.__class__.instances.append(self)
 
+            def require_compatible_server(self):
+                return {"api_version": "v1", "server_version": "0.1.0"}
+
             def submit(self, request, files):
                 self.request = request
                 self.files = files
@@ -168,7 +171,7 @@ class NodeContractTests(unittest.TestCase):
             def __init__(self, server_url, api_key):
                 self.__class__.values = (server_url, api_key)
 
-            def submit(self, request, files):
+            def require_compatible_server(self):
                 raise RuntimeError("stop")
 
         module.H3Client = StopAfterConstruction
