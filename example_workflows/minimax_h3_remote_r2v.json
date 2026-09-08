@@ -1,0 +1,288 @@
+{
+  "id": "f2064e74-624f-58c4-bbae-1000a51bcded",
+  "revision": 0,
+  "version": 1,
+  "state": {
+    "lastGroupId": 0,
+    "lastNodeId": 2,
+    "lastLinkId": 1,
+    "lastRerouteId": 0
+  },
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadImage",
+      "pos": [
+        80,
+        80
+      ],
+      "size": [
+        320,
+        360
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "COMBO",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        },
+        {
+          "name": "upload",
+          "type": "IMAGEUPLOAD",
+          "widget": {
+            "name": "upload"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            1
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "slot_index": 1,
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "reference.png",
+        "image"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "MiniMaxH3Remote",
+      "pos": [
+        540,
+        180
+      ],
+      "size": [
+        460,
+        540
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "server_url",
+          "type": "STRING",
+          "widget": {
+            "name": "server_url"
+          },
+          "link": null
+        },
+        {
+          "name": "api_key",
+          "type": "STRING",
+          "widget": {
+            "name": "api_key"
+          },
+          "link": null
+        },
+        {
+          "name": "mode",
+          "type": "COMBO",
+          "widget": {
+            "name": "mode"
+          },
+          "link": null
+        },
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": null
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": null
+        },
+        {
+          "name": "frames",
+          "type": "INT",
+          "widget": {
+            "name": "frames"
+          },
+          "link": null
+        },
+        {
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "name": "poll_interval_s",
+          "type": "FLOAT",
+          "widget": {
+            "name": "poll_interval_s"
+          },
+          "link": null
+        },
+        {
+          "name": "timeout_minutes",
+          "type": "INT",
+          "widget": {
+            "name": "timeout_minutes"
+          },
+          "link": null
+        },
+        {
+          "name": "first_frame",
+          "type": "IMAGE",
+          "link": null,
+          "slot_index": 11
+        },
+        {
+          "name": "last_frame",
+          "type": "IMAGE",
+          "link": null,
+          "slot_index": 12
+        },
+        {
+          "name": "ref_images",
+          "type": "IMAGE",
+          "link": 1,
+          "slot_index": 13
+        },
+        {
+          "name": "ref_video",
+          "type": "VIDEO",
+          "link": null,
+          "slot_index": 14
+        },
+        {
+          "name": "ref_audio",
+          "type": "AUDIO",
+          "link": null,
+          "slot_index": 15
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "slot_index": 0,
+          "links": null
+        },
+        {
+          "name": "frames",
+          "type": "IMAGE",
+          "slot_index": 1,
+          "links": null
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "slot_index": 2,
+          "links": null
+        },
+        {
+          "name": "fps",
+          "type": "FLOAT",
+          "slot_index": 3,
+          "links": null
+        },
+        {
+          "name": "job_id",
+          "type": "STRING",
+          "slot_index": 4,
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "minimax-h3-remote",
+        "ver": "0.1.0",
+        "Node name for S&R": "MiniMaxH3Remote"
+      },
+      "widgets_values": [
+        "",
+        "",
+        "r2v",
+        "The subject shown in <Picture 1> walks toward the camera. Gentle wind and natural ambience.",
+        640,
+        384,
+        22,
+        4,
+        11,
+        "fixed",
+        4.0,
+        240
+      ]
+    }
+  ],
+  "links": [
+    {
+      "id": 1,
+      "origin_id": 1,
+      "origin_slot": 0,
+      "target_id": 2,
+      "target_slot": 13,
+      "type": "IMAGE"
+    }
+  ],
+  "groups": [],
+  "reroutes": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.0,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "info": {
+      "name": "MiniMax H3 Remote - Reference Image to Video",
+      "author": "zihaomu",
+      "description": "Generate a video from a reference image with a remote MiniMax H3 server.",
+      "version": "0.1.0",
+      "created": "2026-09-08",
+      "modified": "2026-09-08",
+      "software": "ComfyUI"
+    }
+  },
+  "models": []
+}

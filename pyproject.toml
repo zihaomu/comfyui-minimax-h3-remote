@@ -1,0 +1,20 @@
+[project]
+name = "minimax-h3-remote"
+version = "0.1.0"
+description = "A ComfyUI client for self-hosted MiniMax H3 video generation over an authenticated asynchronous API."
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = []
+classifiers = [
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+]
+
+[project.urls]
+Repository = "https://github.com/zihaomu/comfyui-minimax-h3-remote"
+Documentation = "https://github.com/zihaomu/comfyui-minimax-h3-remote/tree/main/doc"
+"Bug Tracker" = "https://github.com/zihaomu/comfyui-minimax-h3-remote/issues"
+
+[tool.comfy]
+PublisherId = "zihaomu"
+DisplayName = "MiniMax H3 Remote"

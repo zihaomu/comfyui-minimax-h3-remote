@@ -25,7 +25,7 @@ class MiniMaxH3Remote:
             "required": {
                 "server_url": (
                     "STRING",
-                    {"default": os.environ.get("H3_API_URL", "https://h3.example.com")},
+                    {"default": os.environ.get("H3_API_URL", "")},
                 ),
                 "api_key": ("STRING", {"default": "", "multiline": False}),
                 "mode": (["t2v", "i2v", "fl2v", "r2v"],),
@@ -54,6 +54,7 @@ class MiniMaxH3Remote:
     RETURN_NAMES = ("video", "frames", "audio", "fps", "job_id")
     FUNCTION = "generate"
     CATEGORY = "MiniMax H3/remote"
+    OUTPUT_NODE = True
 
     def generate(
         self,
@@ -74,6 +75,7 @@ class MiniMaxH3Remote:
         ref_video=None,
         ref_audio=None,
     ):
+        server_url = server_url.strip() or os.environ.get("H3_API_URL", "")
         api_key = api_key.strip() or os.environ.get("H3_API_KEY", "")
         frames = _snap_frames(frames)
         _validate_inputs(mode, first_frame, last_frame, ref_images, ref_video, ref_audio)
